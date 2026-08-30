@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tejashwini Pujari — Data Engineer · AI/ML & LLM/RAG Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0E1A;
+    --bg-elevated:#111729;
+    --bg-card:#141B30;
+    --line:#232B45;
+    --ink:#ECEEF4;
+    --ink-dim:#96A0B8;
+    --ink-faint:#5B6484;
+
+    /* the three-layer stack, used consistently as the page's color system */
+    --data:#31C4B0;        /* data engineering — teal */
+    --data-soft:rgba(49,196,176,0.14);
+    --model:#8C7DF2;       /* model building — violet */
+    --model-soft:rgba(140,125,242,0.16);
+    --llm:#F2667A;         /* LLM & RAG — coral */
+    --llm-soft:rgba(242,102,122,0.16);
+
+    --radius:10px;
+    --max:1080px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.6;
+  }
+  ::selection{background:var(--model-soft);color:var(--ink);}
+  a{color:inherit;}
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--model);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;margin:0;letter-spacing:-0.01em;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 28px;}
+
+  /* ---------- nav ---------- */
+  header.nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(10,14,26,0.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:var(--max);margin:0 auto;padding:16px 28px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .nav-mark{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;letter-spacing:0.02em;}
+  .nav-mark span{
+    background:linear-gradient(90deg,var(--data),var(--model),var(--llm));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .nav-links{display:flex;gap:28px;list-style:none;margin:0;padding:0;}
+  .nav-links a{
+    font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:0.08em;
+    color:var(--ink-dim);text-decoration:none;transition:color .2s;
+  }
+  .nav-links a:hover{color:var(--model);}
+  @media (max-width:640px){ .nav-links{display:none;} }
+
+  /* ---------- hero ---------- */
+  .hero{padding:96px 0 72px;position:relative;overflow:hidden;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--model);margin-bottom:18px;display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{content:'';width:22px;height:1px;background:var(--model);display:inline-block;}
+  .hero h1{
+    font-size:clamp(36px,6vw,66px);font-weight:700;line-height:1.06;
+    max-width:15ch;color:var(--ink);
+  }
+  .hero h1 .grad{
+    background:linear-gradient(100deg,var(--data) 0%, var(--model) 50%, var(--llm) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero p.lead{
+    margin-top:22px;max-width:58ch;color:var(--ink-dim);font-size:17px;
+  }
+  .hero-meta{
+    margin-top:26px;display:flex;flex-wrap:wrap;gap:10px 22px;
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--ink-faint);
+  }
+  .hero-cta{margin-top:36px;display:flex;flex-wrap:wrap;gap:14px;}
+  .btn{
+    font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.02em;
+    padding:12px 20px;border-radius:8px;text-decoration:none;
+    display:inline-flex;align-items:center;gap:8px;transition:transform .15s ease, border-color .15s ease, filter .15s ease;
+    border:1px solid var(--line);
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn-primary{
+    background:linear-gradient(100deg,var(--data),var(--model));
+    color:#0A0E1A;border-color:transparent;font-weight:600;
+  }
+  .btn-primary:hover{filter:brightness(1.08);}
+  .btn-ghost{color:var(--ink);background:transparent;}
+  .btn-ghost:hover{border-color:var(--model);color:var(--model);}
+
+  /* ---------- stack strip: the explicit "full stack" statement ---------- */
+  .pipeline{
+    margin-top:64px;display:grid;grid-template-columns:repeat(3,1fr);gap:0;
+    border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
+    position:relative;
+  }
+  .pipeline::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,var(--data),var(--model),var(--llm));
+  }
+  .stage{
+    position:relative;padding:26px 20px 22px;background:var(--bg-elevated);
+    border-right:1px solid var(--line);
+  }
+  .stage:last-child{border-right:none;}
+  .stage .tag{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
+    display:inline-flex;align-items:center;gap:7px;margin-bottom:10px;
+  }
+  .dot{width:7px;height:7px;border-radius:50%;display:inline-block;}
+  .stage.data .dot{background:var(--data);} .stage.data .tag{color:var(--data);}
+  .stage.model .dot{background:var(--model);} .stage.model .tag{color:var(--model);}
+  .stage.llm .dot{background:var(--llm);} .stage.llm .tag{color:var(--llm);}
+  .stage h3{font-size:16px;font-weight:600;color:var(--ink);margin-bottom:4px;}
+  .stage p{margin:0;font-size:12.5px;color:var(--ink-faint);}
+  .pulse{
+    position:absolute;top:0;left:0;height:2px;width:40%;
+    background:linear-gradient(90deg, transparent, currentColor, transparent);
+    animation:flow 3.6s linear infinite;
+  }
+  .stage.data .pulse{color:var(--data);animation-delay:0s;}
+  .stage.model .pulse{color:var(--model);animation-delay:1.2s;}
+  .stage.llm .pulse{color:var(--llm);animation-delay:2.4s;}
+  @keyframes flow{
+    0%{transform:translateX(-100%);opacity:0;}
+    15%{opacity:1;}
+    85%{opacity:1;}
+    100%{transform:translateX(350%);opacity:0;}
+  }
+  @media (max-width:720px){
+    .pipeline{grid-template-columns:1fr;}
+    .stage{border-right:none;border-bottom:1px solid var(--line);}
+    .stage:last-child{border-bottom:none;}
+  }
+
+  /* ---------- stats strip ---------- */
+  .stats{
+    margin-top:40px;display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+    border-top:1px solid var(--line);
+  }
+  .stat{padding:20px 20px 0;border-right:1px solid var(--line);}
+  .stat:last-child{border-right:none;}
+  .stat .num{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(22px,3vw,32px);
+    background:linear-gradient(100deg,var(--data),var(--model));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .stat .cap{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.06em;margin-top:4px;}
+  @media (max-width:640px){
+    .stats{grid-template-columns:1fr 1fr;row-gap:20px;}
+    .stat:nth-child(2){border-right:none;}
+    .stat{border-bottom:1px solid var(--line);padding-bottom:16px;}
+    .stat:nth-child(3),.stat:nth-child(4){border-bottom:none;}
+  }
+
+  /* ---------- section shared ---------- */
+  section{padding:64px 0;border-top:1px solid var(--line);}
+  .section-head{display:flex;align-items:baseline;gap:16px;margin-bottom:36px;}
+  .section-head .num{font-family:'JetBrains Mono',monospace;color:var(--ink-faint);font-size:13px;}
+  .section-head h2{font-size:26px;font-weight:600;}
+
+  /* ---------- summary ---------- */
+  .summary p{max-width:74ch;color:var(--ink-dim);font-size:16px;}
+  .stack-line{
+    margin-top:18px;display:flex;flex-wrap:wrap;gap:10px;font-family:'JetBrains Mono',monospace;font-size:13px;
+  }
+  .stack-line span{padding:6px 14px;border-radius:20px;border:1px solid var(--line);}
+  .stack-line .s1{color:var(--data);background:var(--data-soft);border-color:transparent;}
+  .stack-line .s2{color:var(--model);background:var(--model-soft);border-color:transparent;}
+  .stack-line .s3{color:var(--llm);background:var(--llm-soft);border-color:transparent;}
+  .stack-line .arrow{color:var(--ink-faint);padding:6px 0;border:none;}
+
+  /* ---------- skills ---------- */
+  .skill-groups{display:grid;gap:22px;}
+  .skill-row{
+    display:grid;grid-template-columns:190px 1fr;gap:20px;align-items:start;
+    padding:16px 0;border-bottom:1px solid var(--line);
+    border-left:2px solid transparent;padding-left:14px;margin-left:-16px;
+  }
+  .skill-row:last-child{border-bottom:none;}
+  .skill-row.data{border-left-color:var(--data);}
+  .skill-row.model{border-left-color:var(--model);}
+  .skill-row.llm{border-left-color:var(--llm);}
+  .skill-row .label{
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-faint);
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--ink-dim);
+    padding:6px 12px;border:1px solid var(--line);border-radius:6px;background:var(--bg-elevated);
+  }
+  @media (max-width:640px){ .skill-row{grid-template-columns:1fr;gap:8px;} }
+
+  /* ---------- experience timeline ---------- */
+  .timeline{position:relative;padding-left:26px;}
+  .timeline::before{content:'';position:absolute;left:5px;top:6px;bottom:6px;width:1px;background:var(--line);}
+  .tl-item{position:relative;padding-bottom:44px;}
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-dot{
+    position:absolute;left:-26px;top:5px;width:11px;height:11px;border-radius:50%;
+    border:2px solid var(--bg);box-shadow:0 0 0 1px var(--line);
+  }
+  .tl-item.data .tl-dot{background:var(--data);box-shadow:0 0 0 1px var(--data);}
+  .tl-item.model .tl-dot{background:var(--model);box-shadow:0 0 0 1px var(--model);}
+  .tl-item.llm .tl-dot{background:var(--llm);box-shadow:0 0 0 1px var(--llm);}
+  .tl-top{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 20px;}
+  .tl-role{font-size:18px;font-weight:600;font-family:'Space Grotesk',sans-serif;}
+  .tl-date{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--ink-faint);white-space:nowrap;}
+  .tl-org{color:var(--ink-faint);font-size:13.5px;margin-top:2px;margin-bottom:12px;font-style:italic;}
+  .tier-badge{
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;
+    padding:2px 8px;border-radius:20px;margin-right:8px;
+  }
+  .tl-item.data .tier-badge{color:var(--data);background:var(--data-soft);}
+  .tl-item.model .tier-badge{color:var(--model);background:var(--model-soft);}
+  .tl-item.llm .tier-badge{color:var(--llm);background:var(--llm-soft);}
+  .tl-item ul{margin:0;padding-left:18px;color:var(--ink-dim);font-size:14.5px;}
+  .tl-item li{margin-bottom:6px;}
+
+  /* ---------- projects ---------- */
+  .project-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+  @media (max-width:760px){ .project-grid{grid-template-columns:1fr;} }
+  .card{
+    background:var(--bg-card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:24px;display:flex;flex-direction:column;gap:12px;transition:border-color .2s, transform .2s;
+    border-top:2px solid transparent;
+  }
+  .card:hover{transform:translateY(-2px);}
+  .card.data{border-top-color:var(--data);}
+  .card.model{border-top-color:var(--model);}
+  .card.llm{border-top-color:var(--llm);}
+  .card h3{font-size:17px;font-weight:600;}
+  .card p{margin:0;color:var(--ink-dim);font-size:14px;flex-grow:1;}
+  .tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
+  .tag-row span{
+    font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-faint);
+    padding:3px 9px;border:1px solid var(--line);border-radius:20px;
+  }
+  .impact{
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;
+    padding-top:10px;border-top:1px dashed var(--line);
+  }
+  .card.data .impact{color:var(--data);}
+  .card.model .impact{color:var(--model);}
+  .card.llm .impact{color:var(--llm);}
+
+  /* ---------- education / certs ---------- */
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+  @media (max-width:760px){ .two-col{grid-template-columns:1fr;gap:36px;} }
+  .edu-item{margin-bottom:22px;}
+  .edu-item:last-child{margin-bottom:0;}
+  .edu-item .deg{font-weight:600;font-size:15.5px;}
+  .edu-item .meta{color:var(--ink-faint);font-size:13px;margin-top:3px;}
+  .cert-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;}
+  .cert-list li{
+    font-size:14px;color:var(--ink-dim);padding-left:18px;position:relative;
+  }
+  .cert-list li::before{
+    content:'';position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;
+    background:linear-gradient(90deg,var(--data),var(--llm));
+  }
+
+  /* ---------- footer ---------- */
+  footer{padding:56px 0 64px;border-top:1px solid var(--line);}
+  .footer-inner{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:flex-end;}
+  footer h2{font-size:24px;max-width:16ch;}
+  .footer-links{display:flex;flex-direction:column;gap:10px;font-family:'JetBrains Mono',monospace;font-size:13px;}
+  .footer-links a{text-decoration:none;color:var(--ink-dim);transition:color .2s;}
+  .footer-links a:hover{color:var(--model);}
+  .fine{margin-top:48px;color:var(--ink-faint);font-size:12px;font-family:'JetBrains Mono',monospace;}
+
+  /* ---------- reveal on scroll ---------- */
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .pulse{animation:none;display:none;}
+    .btn:hover{transform:none;}
+    .card:hover{transform:none;}
+    .reveal{opacity:1;transform:none;transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="nav-mark">TEJASHWINI<span>.</span>PUJARI</div>
+    <ul class="nav-links">
+      <li><a href="#summary">Summary</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#education">Education</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <section class="hero wrap" style="border-top:none;padding-top:96px;">
+    <div class="eyebrow">Bengaluru, India</div>
+    <h1>The full stack, from raw data to <span class="grad">generative intelligence.</span></h1>
+    <p class="lead">Data Engineer &amp; AI/ML Engineer working across the entire pipeline — building cloud data infrastructure, training forecasting &amp; ML models, and shipping LLM/RAG systems that turn documents into answers.</p>
+    <div class="hero-meta">
+      <span>+91 8867524218</span>
+      <span>tejshwinipujari93@gmail.com</span>
+    </div>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="mailto:tejshwinipujari93@gmail.com">Email me →</a>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/tejshwinipujari1/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn btn-ghost" href="https://github.com/Tejashwini-pujari?tab=repositories" target="_blank" rel="noopener">GitHub</a>
+    </div>
+
+    <div class="pipeline" role="img" aria-label="Full stack spanning Data Engineering, Model Building, and LLM and RAG">
+      <div class="stage data"><div class="pulse"></div>
+        <div class="tag"><span class="dot"></span>Data Engineering</div>
+        <h3>Pipelines &amp; infrastructure</h3>
+        <p>S3, Glue, Databricks, and Delta Lake — ingesting and validating data at scale.</p>
+      </div>
+      <div class="stage model"><div class="pulse"></div>
+        <div class="tag"><span class="dot"></span>Model Building</div>
+        <h3>ML &amp; forecasting</h3>
+        <p>Scikit-learn, Prophet, and XGBoost — turning clean data into predictions.</p>
+      </div>
+      <div class="stage llm"><div class="pulse"></div>
+        <div class="tag"><span class="dot"></span>LLM &amp; RAG</div>
+        <h3>Generative AI</h3>
+        <p>Retrieval, prompt engineering, and LLM applications people can talk to.</p>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="num">3.7M+</div><div class="cap">records in one pipeline</div></div>
+      <div class="stat"><div class="num">6</div><div class="cap">production-style projects</div></div>
+      <div class="stat"><div class="num">3</div><div class="cap">data/ML internships</div></div>
+      <div class="stat"><div class="num">8.99</div><div class="cap">CGPA / 10</div></div>
+    </div>
+  </section>
+
+  <section id="summary" class="wrap summary">
+    <div class="section-head"><span class="num">01</span><h2>Summary</h2></div>
+    <p>Data Engineer and AI/ML Engineer with hands-on experience building end-to-end cloud data pipelines and production-oriented machine learning and LLM/RAG solutions. Skilled in Python, SQL, PySpark, Databricks, and AWS (S3, Glue, Redshift) for large-scale ETL, data quality, and Bronze-Silver-Gold Delta Lake architectures, combined with Machine Learning, Time Series Forecasting, NLP, and Generative AI. Delivered a 3.7M+ record Databricks pipeline, an AWS Glue-based ETL workflow, a hybrid Prophet + XGBoost forecasting system, and an LLM-powered RAG document intelligence system — currently looking for a Data Engineering / AI-ML role to apply these skills at scale.</p>
+    <div class="stack-line">
+      <span class="s1">Data Engineering</span>
+      <span class="arrow">→</span>
+      <span class="s2">Model Building</span>
+      <span class="arrow">→</span>
+      <span class="s3">LLM &amp; RAG</span>
+    </div>
+  </section>
+
+  <section id="skills" class="wrap">
+    <div class="section-head"><span class="num">02</span><h2>Skills</h2></div>
+    <div class="skill-groups">
+      <div class="skill-row data">
+        <div class="label">Data &amp; Cloud</div>
+        <div class="chips">
+          <span class="chip">Python</span><span class="chip">SQL</span><span class="chip">PySpark</span>
+          <span class="chip">Apache Spark</span><span class="chip">Hadoop</span><span class="chip">Databricks</span>
+          <span class="chip">Delta Lake</span><span class="chip">AWS S3</span><span class="chip">AWS Glue</span>
+          <span class="chip">Redshift</span><span class="chip">Lambda</span><span class="chip">Airflow</span>
+          <span class="chip">Docker</span>
+        </div>
+      </div>
+      <div class="skill-row model">
+        <div class="label">Machine Learning</div>
+        <div class="chips">
+          <span class="chip">Scikit-learn</span><span class="chip">Regression</span><span class="chip">Classification</span>
+          <span class="chip">Clustering</span><span class="chip">Feature Engineering</span>
+          <span class="chip">Prophet</span><span class="chip">XGBoost</span><span class="chip">Model Evaluation</span>
+        </div>
+      </div>
+      <div class="skill-row llm">
+        <div class="label">LLM / GenAI</div>
+        <div class="chips">
+          <span class="chip">TensorFlow</span><span class="chip">Keras</span><span class="chip">NLP</span>
+          <span class="chip">CNN</span><span class="chip">LLMs</span><span class="chip">RAG</span>
+          <span class="chip">Prompt Engineering</span><span class="chip">Computer Vision</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <div class="label">Databases &amp; Tools</div>
+        <div class="chips">
+          <span class="chip">MySQL</span><span class="chip">PostgreSQL</span><span class="chip">SQLite</span>
+          <span class="chip">Git/GitHub</span><span class="chip">Power BI</span><span class="chip">Streamlit</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience" class="wrap">
+    <div class="section-head"><span class="num">03</span><h2>Experience</h2></div>
+    <div class="timeline">
+
+      <div class="tl-item llm">
+        <div class="tl-dot"></div>
+        <div class="tl-top">
+          <div class="tl-role">Junior Data Scientist Intern</div>
+          <div class="tl-date mono">May 2026 — Present</div>
+        </div>
+        <div class="tl-org">Cron Labs, Bengaluru</div>
+        <span class="tier-badge">Data Eng + ML</span>
+        <ul>
+          <li>Build data preparation, transformation, and ML workflows using Python, SQL, Pandas, PySpark, Apache Spark, and Databricks.</li>
+          <li>Engineer cloud-based ingestion and metadata workflows with Amazon S3, AWS Glue, and Glue Data Catalog.</li>
+          <li>Implement Bronze-Silver-Gold Delta Lake architecture for cleansing, validation, enrichment, and analytics readiness.</li>
+          <li>Contribute to a hybrid Prophet + XGBoost milk-price forecasting solution for time-series prediction.</li>
+        </ul>
+      </div>
+
+      <div class="tl-item model">
+        <div class="tl-dot"></div>
+        <div class="tl-top">
+          <div class="tl-role">Data Science Trainee</div>
+          <div class="tl-date mono">Jun 2025 — May 2026</div>
+        </div>
+        <div class="tl-org">EchoBrains, Bengaluru</div>
+        <span class="tier-badge">ML + LLM/RAG</span>
+        <ul>
+          <li>Performed data cleaning, EDA, feature engineering, and statistical analysis using Python, Pandas, and NumPy.</li>
+          <li>Developed and evaluated regression, classification, and clustering models with Scikit-learn.</li>
+          <li>Built NLP, LLM, and RAG applications for document processing and intelligent retrieval.</li>
+          <li>Created analytical dashboards using Power BI, Matplotlib, and Seaborn.</li>
+        </ul>
+      </div>
+
+      <div class="tl-item data">
+        <div class="tl-dot"></div>
+        <div class="tl-top">
+          <div class="tl-role">Data Engineering Trainee</div>
+          <div class="tl-date mono">Apr 2025 — Jun 2025</div>
+        </div>
+        <div class="tl-org">Revature (Remote)</div>
+        <span class="tier-badge">Data Engineering</span>
+        <ul>
+          <li>Developed data processing workflows using Python, SQL, PySpark, Hadoop, and Hive.</li>
+          <li>Implemented data transformation, cleansing, validation, joins, and aggregations using SQL and Spark.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="projects" class="wrap">
+    <div class="section-head"><span class="num">04</span><h2>Projects</h2></div>
+    <div class="project-grid">
+
+      <div class="card data">
+        <h3>Databricks NYC Taxi Pipeline</h3>
+        <p>Processed 3.7M+ NYC taxi records through a full Bronze-Silver-Gold pipeline — cleansing invalid distances, timestamps, and fares, then producing curated Delta tables and daily summaries.</p>
+        <div class="tag-row"><span>Databricks</span><span>PySpark</span><span>Delta Lake</span></div>
+        <div class="impact">→ 3.7M+ records cleaned &amp; curated</div>
+      </div>
+
+      <div class="card data">
+        <h3>AWS Cloud ETL Pipeline</h3>
+        <p>An AWS-native ETL workflow across S3, Glue, and Redshift with duplicate detection, schema validation, error handling, and pipeline monitoring built in.</p>
+        <div class="tag-row"><span>AWS Glue</span><span>Redshift</span><span>PySpark</span></div>
+        <div class="impact">→ Automated quality gates end-to-end</div>
+      </div>
+
+      <div class="card data">
+        <h3>E-Commerce ETL Pipeline</h3>
+        <p>Bronze-Silver-Gold workflow unifying customer, product, order, payment, and transaction data into business-ready datasets with full quality validation.</p>
+        <div class="tag-row"><span>Python</span><span>SQL</span><span>PySpark</span></div>
+        <div class="impact">→ 5 data domains unified into one model</div>
+      </div>
+
+      <div class="card model">
+        <h3>Milk Price Forecasting</h3>
+        <p>Hybrid Prophet + XGBoost forecasting system with lag, rolling, seasonality, weather, and YoY features — evaluated on MAE, RMSE, MAPE, and directional accuracy, shipped as a Streamlit app.</p>
+        <div class="tag-row"><span>Prophet</span><span>XGBoost</span><span>Streamlit</span></div>
+        <div class="impact">→ Shipped as a live, interactive app</div>
+      </div>
+
+      <div class="card llm">
+        <h3>AI Talent Scout Agent</h3>
+        <p>LLM-powered recruitment system that parses job descriptions and resumes, then extracts, matches, ranks, and scores candidates against roles.</p>
+        <div class="tag-row"><span>LLMs</span><span>NLP</span></div>
+        <div class="impact">→ End-to-end resume-to-ranking pipeline</div>
+      </div>
+
+      <div class="card llm">
+        <h3>Intelligent Document Parsing (RAG)</h3>
+        <p>A retrieval-augmented generation system handling ingestion, chunking, retrieval, and context-grounded generation over structured and unstructured documents.</p>
+        <div class="tag-row"><span>RAG</span><span>LLMs</span></div>
+        <div class="impact">→ Grounded answers over unstructured docs</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="education" class="wrap">
+    <div class="section-head"><span class="num">05</span><h2>Education &amp; Certifications</h2></div>
+    <div class="two-col">
+      <div>
+        <div class="edu-item">
+          <div class="deg">Bachelor of Engineering, Information Science and Engineering</div>
+          <div class="meta">Bapuji Institute of Engineering and Technology, Karnataka · CGPA 8.99/10 · 2021–2025</div>
+        </div>
+        <div class="edu-item">
+          <div class="deg">Pre-University Education</div>
+          <div class="meta">KLE Society's G.I. Bagewadi College · 90.33% · 2021</div>
+        </div>
+      </div>
+      <ul class="cert-list">
+        <li>Data Science &amp; AI Certification — EchoBrain</li>
+        <li>Finalist — Next Gen Minds National-Level Challenge, 2025</li>
+        <li>Winner — Tech Utsav 2K24 Ideathon</li>
+        <li>Participant — Scalar AI Hackathon</li>
+        <li>Google Developer Student Clubs (GDSC) Member</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div class="footer-inner">
+    <h2>Let's build something that scales.</h2>
+    <div class="footer-links">
+      <a href="mailto:tejshwinipujari93@gmail.com">tejshwinipujari93@gmail.com</a>
+      <a href="tel:+918867524218">+91 8867524218</a>
+      <a href="https://www.linkedin.com/in/tejshwinipujari1/" target="_blank" rel="noopener">linkedin.com/in/tejshwinipujari1</a>
+      <a href="https://github.com/Tejashwini-pujari?tab=repositories" target="_blank" rel="noopener">github.com/Tejashwini-pujari</a>
+    </div>
+  </div>
+  <div class="fine">Bengaluru, India — built with intent.</div>
+</footer>
+
+<script>
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const targets = document.querySelectorAll('.section-head, .card, .tl-item, .skill-row, .edu-item');
+    targets.forEach(el => el.classList.add('reveal'));
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    targets.forEach(el => io.observe(el));
+  }
+</script>
+
+</body>
+</html>
